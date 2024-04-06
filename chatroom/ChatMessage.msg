@@ -1,0 +1,3 @@
+string username
+string message
+
