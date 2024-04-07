@@ -1,3 +1,0 @@
-string username
-string message
-
