@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="rover_world">
+
+    <!-- Include Ground Plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Include Rover Model -->
+    <include>
+      <uri>model://lil_martian_slave</uri>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+
+    <!-- Include Lights (Optional) -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+  </world>
+</sdf>

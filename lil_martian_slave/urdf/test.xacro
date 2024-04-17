@@ -1,0 +1,102 @@
+<? xml version= "1.0" ?>
+
+<robot name="rover">
+
+    <!-- Base Link -->
+    <link name="base_link">
+      <!-- Define visual and collision geometry for the base link -->
+      <visual>
+        <geometry>
+          <box size="1 0.3 0.1"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="1 0.3 0.1"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Wheel Links -->
+    <link name="wheel_front_left">
+      <visual>
+        <geometry>
+          <cylinder length="0.1" radius="0.05"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder length="0.1" radius="0.05"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="wheel_front_right">
+      <visual>
+        <geometry>
+          <cylinder length="0.1" radius="0.05"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder length="0.1" radius="0.05"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="wheel_rear_left">
+      <visual>
+        <geometry>
+          <cylinder length="0.1" radius="0.05"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder length="0.1" radius="0.05"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="wheel_rear_right">
+      <visual>
+        <geometry>
+          <cylinder length="0.1" radius="0.05"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder length="0.1" radius="0.05"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Joints for Wheels -->
+    <joint name="joint_front_left" type="continuous">
+      <parent link="base_link"/>
+      <child link="wheel_front_left"/>
+      <origin xyz="0.5 -0.15 -0.05"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+    <joint name="joint_front_right" type="continuous">
+      <parent link="base_link"/>
+      <child link="wheel_front_right"/>
+      <origin xyz="0.5 0.15 -0.05"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+    <joint name="joint_rear_left" type="continuous">
+      <parent link="base_link"/>
+      <child link="wheel_rear_left"/>
+      <origin xyz="-0.5 -0.15 -0.05"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+    <joint name="joint_rear_right" type="continuous">
+      <parent link="base_link"/>
+      <child link="wheel_rear_right"/>
+      <origin xyz="-0.5 0.15 -0.05"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+
+  </robot>

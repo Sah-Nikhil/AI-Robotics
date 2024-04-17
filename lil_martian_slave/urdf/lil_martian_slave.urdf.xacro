@@ -1,0 +1,341 @@
+<?xml version="1.0"?>
+
+<robot name="lil_martian_slave">
+    <link name="base_link">
+        
+        <visual>
+            <geometry>
+                <box size="1 0.3 0.1"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="1 0.3 0.1"/>
+            </geometry>
+        </collision>
+
+        <inertial>
+            <origin xyz="0.0 0 0" rpy=" 0 0 0"/>
+            <mass value="10"/>
+            <inertia 
+            ixx="0.4" ixy="0.0" ixz="0.0" 
+            iyy="0.4" iyz="0.0" 
+            izz="0.2"
+            />
+        </inertial>
+    </link>
+        
+        <!-- wheels_right -->
+        <link name='back_right_caster'>
+            <visual>
+                <geometry>
+                    <cylinder length="0.1" radius="0.05"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder length="0.1" radius="0.05"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name='front_right_caster'>
+            <visual>
+                <geometry>
+                    <cylinder length="0.1" radius="0.05"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder length="0.1" radius="0.05"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- wheels_left-->
+        <link name='back_left_caster'>
+            <visual>
+                <geometry>
+                    <cylinder length="0.1" radius="0.05"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder length="0.1" radius="0.05"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <link name='front_left_caster'>
+            <visual>
+                <geometry>
+                    <cylinder length="0.1" radius="0.05"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry>
+                    <cylinder length="0.1" radius="0.05"/>
+                </geometry>
+            </collision>
+        </link>
+
+    <!-- Joints for Wheels -->
+        <joint name="front_left_joint" type="continuous">
+            <parent link="base_link"/>
+            <child link="front_left_caster"/>
+            <origin xyz="0.5 -0.15 -0.05" rpy="0 1.57079632679 1.57079632679"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+
+        <joint name="front_right_joint" type="continuous">
+            <parent link="base_link"/>
+            <child link="front_right_caster"/>
+            <origin xyz="0.5 0.15 -0.05" rpy="0 -1.57079632679 -1.57079632679"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+
+        <joint name="back_left_joint" type="continuous">
+            <parent link="base_link"/>
+            <child link="back_left_caster"/>
+            <origin xyz="-0.5 -0.15 -0.05" rpy="0 1.57079632679 1.57079632679"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+
+        <joint name="back_right_joint" type="continuous">
+            <parent link="base_link"/>
+            <child link="back_right_caster"/>
+            <origin xyz="-0.5 0.15 -0.05" rpy="0 -1.57079632679 -1.57079632679"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+    
+
+    <!-- skid-steer-->
+    <gazebo>
+        <plugin name="skid_steer_controller" filename="libgazebo_ros_skid_steer_drive.so">
+            <left_joint>front_left_caster</left_joint>
+            <right_joint>front_right_caster</right_joint>
+            <left_joint>back_left_caster</left_joint>
+            <right_joint>back_right_caster</right_joint>
+            <publish_rate>50</publish_rate>
+            <wheel_separation>0.3</wheel_separation>
+            <wheel_radius>0.05</wheel_radius>
+            <command_topic>/cmd_vel</command_topic>
+            <odometry_topic>/odom</odometry_topic>
+            <odometry_frame>odom</odometry_frame>
+            <robot_base_frame>base_link</robot_base_frame>
+        </plugin>
+    </gazebo>
+    
+
+
+
+
+
+
+    <!-- Lidar Sensor -->
+    <link name="lidar_link">
+        <visual>
+            <geometry>
+                <cylinder length="0.05" radius="0.05"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.05" radius="0.05"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="lidar_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="lidar_link"/>
+        <origin xyz="0.45 0 0.074"/> 
+    </joint>
+
+    <gazebo reference="lidar_link">
+        <sensor type="ray" name="lidar_sensor">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>720</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-1.57079632679</min_angle>
+                        <max_angle>1.57079632679</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.1</min>
+                    <max>10</max>
+                    <resolution>0.01</resolution>
+                </range>
+            </ray>
+            <plugin name="lidar_plugin" filename="libgazebo_ros_ray_sensor.so">
+                <robotNamespace>/lil_martian_slave</robotNamespace>
+                <topicName>lidar_scan</topicName>
+                <frameName>lidar_link</frameName>
+                <alwaysOn>true</alwaysOn>
+                <updateRate>10.0</updateRate>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+    <!-- GPS Sensor -->
+    <link name="gps_link">
+        <visual>
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="gps_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="gps_link"/>
+        <origin xyz="0 0 0.14"/> 
+    </joint>
+
+    <gazebo>
+        <plugin name="gps_plugin" filename="libgazebo_ros_gps.so">
+            <robotNamespace>/lil_martian_slave</robotNamespace>
+            <topicName>gps</topicName>
+            <frameName>gps_link</frameName>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>10.0</updateRate>
+        </plugin>
+    </gazebo>
+
+    <!-- IMU Sensor -->
+    <link name="imu_link">
+        <visual>
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="imu_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="imu_link"/>
+        <origin xyz="0 0 0.07"/> 
+    </joint>
+
+    <gazebo>
+        <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+            <robotNamespace>/lil_martian_slave</robotNamespace>
+            <topicName>imu</topicName>
+            <frameName>imu_link</frameName>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>10.0</updateRate>
+        </plugin>
+    </gazebo>
+
+    <!-- ZED2 Stereo Camera -->
+    <link name="zed2_link">
+        <visual>
+            <geometry>
+                <box size="0.05 0.1 0.05"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.05 0.1 0.05"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="zed2_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="zed2_link"/>
+        <origin xyz="0.5 0 0.05"/> 
+    </joint>
+
+    <gazebo>
+        <plugin name="zed2_plugin" filename="libgazebo_ros_openni_kinect.so">
+            <robotNamespace>/lil_martian_slave</robotNamespace>
+            <topicName>camera/rgb/image_raw</topicName>
+            <frameName>zed2_link</frameName>
+            <updateRate>30.0</updateRate>
+            <camera>
+                <horizontal_fov>1.047198</horizontal_fov>
+                <image>
+                    <width>640</width>
+                    <height>480</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.1</near>
+                    <far>100</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
+            </camera>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>10.0</updateRate>
+        </plugin>
+    </gazebo>
+
+    <!-- Additional Camera -->
+    <link name="camera_link">
+        <visual>
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+        <origin xyz="0.5 0 0.2"/> 
+    </joint>
+
+    <gazebo>
+        <plugin name="camera_plugin" filename="libgazebo_ros_camera.so">
+            <robotNamespace>/my_robot</robotNamespace>
+            <topicName>camera/image_raw</topicName>
+            <frameName>camera_link</frameName>
+            <updateRate>30.0</updateRate>
+            <camera>
+                <horizontal_fov>1.047198</horizontal_fov>
+                <image>
+                    <width>640</width>
+                    <height>480</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.1</near>
+                    <far>100</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.007</stddev>
+                </noise>
+            </camera>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>10.0</updateRate>
+        </plugin>
+    </gazebo>
+
+</robot>
