@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="zed2_sensor">
+
+<link name="zed2_link">
+    <inertial>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <mass value="1.0"/>
+        <inertia ixx="7.41e-4" ixy="0.0" ixz="0.0" iyy="7.41e-4" iyz="0.0" izz="1.066e-3"/>
+    </inertial>
+    <visual name="">
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+            <box size="0.04 0.04 0.04"/>
+        </geometry>
+        <material name="">
+            <color rgba="0.0 1.0 1.0 1.0"/>
+            <texture filename=""/>
+        </material>
+    </visual>
+    <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+            <box size="0.0 0.0 0.0"/>
+        </geometry>
+    </collision>
+</link>
+
+<joint name="zed2_joint" type="fixed">
+    <origin xyz="0.26 0 0.05" rpy="0.0 0 0"/>
+    <parent link="chassis"/>
+    <child link="zed2_link"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+</joint>
+
+<link name="zed2_optical_frame"/>
+
+<joint name="zed2_optical_joint" type="fixed">
+  <origin xyz="0.26 0 0.05" rpy="0 0 0.0"/>
+  <parent link="zed2_link"/>
+  <child link="zed2_optical_frame"/>
+</joint>
+
+    <gazebo reference="zed2_optical_frame">
+    <material>Gazebo/Orange</material>
+  <sensor name="zed2_optical_frame" type="depth">
+    <update_rate>20</update_rate>
+    <camera>
+      <horizontal_fov>2.09</horizontal_fov>
+      <image>
+        <width>640</width>
+        <height>480</height>
+        <format>R8G8B8</format>
+      </image>
+      <clip>
+        <near>0.0001</near>
+        <far>3</far>
+      </clip>
+    </camera>
+    <plugin name="zed2_link_controller" filename="libgazebo_ros_openni_kinect.so">
+      <baseline>0.2</baseline>
+      <alwaysOn>true</alwaysOn>
+      <updateRate>1.0</updateRate>
+      <cameraName>zed2_cam_ir</cameraName>
+      <imageTopicName>/zed2_cam/color/image_raw</imageTopicName>
+      <cameraInfoTopicName>/zed2_cam/color/camera_info</cameraInfoTopicName>
+      <depthImageTopicName>/zed2_cam/depth/image_raw</depthImageTopicName>
+      <depthImageInfoTopicName>/zed2_cam/depth/camera_info</depthImageInfoTopicName>
+      <pointCloudTopicName>/zed2_cam/depth/points</pointCloudTopicName>
+      <frameName>zed2_link</frameName>
+      <pointCloudCutoff>0.001</pointCloudCutoff>
+      <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+      <distortionK1>0.00000001</distortionK1>
+      <distortionK2>0.00000001</distortionK2>
+      <distortionK3>0.00000001</distortionK3>
+      <distortionT1>0.00000001</distortionT1>
+      <distortionT2>0.00000001</distortionT2>
+      <CxPrime>0</CxPrime>
+      <Cx>0</Cx>
+      <Cy>0</Cy>
+      <focalLength>0</focalLength>
+      <hackBaseline>0</hackBaseline>
+    </plugin>
+  </sensor>
+</gazebo>
+
+</robot>

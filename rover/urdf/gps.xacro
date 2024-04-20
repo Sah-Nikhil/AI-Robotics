@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+
+
+
+<!--THIS FILE STANDS REDUNDANT AFTER FIXES IN THE CODE-->
+
+
+
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="gps_sensor">
+
+
+</robot>
