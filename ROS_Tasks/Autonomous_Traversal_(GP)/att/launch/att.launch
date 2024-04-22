@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<launch>
+    
+    <node name="att" pkg="att" type="att" output="screen" launch-prefix="xterm -e"/>
+
+    <include file="$(find rover)/launch/world.launch">
+    </include>
+
+</launch>
+
+
