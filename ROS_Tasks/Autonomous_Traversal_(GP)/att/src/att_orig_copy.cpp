@@ -66,7 +66,7 @@ public:
         double y = sin(dLon) * cos(toRadians(lat2));
         double x = cos(toRadians(lat1)) * sin(toRadians(lat2)) -
                    sin(toRadians(lat1)) * cos(toRadians(lat2)) * cos(dLon);
-        double bearing = atan2(x, y);
+        double bearing = atan2(y, x);
         return toDegrees(bearing);
     }
 
