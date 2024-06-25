@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+    <node name="oanode" pkg="OA" type="oanode" output="screen"/>
+
+    <include file="$(find rover)/launch/world.launch"/>
+</launch>
