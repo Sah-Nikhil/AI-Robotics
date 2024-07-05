@@ -43,6 +43,18 @@ def main():
                 # Draw axis for the marker
                 cv2.drawFrameAxes(frame, camera_matrix, dist_coeffs, rvec, tvec, 0.1)
 
+                # Calculate the distance from the camera to the marker
+                distance = np.linalg.norm(tvec)
+                distance_text = f"Distance: {distance:.2f} m"
+
+                # Draw a line from the camera center to the marker center
+                camera_center = (int(camera_matrix[0, 2]), int(camera_matrix[1, 2]))
+                marker_center = (int(corners[0][0][0][0]), int(corners[0][0][0][1]))
+                cv2.line(frame, camera_center, marker_center, (0, 255, 0), 2)
+
+                # Put the distance text on the frame
+                cv2.putText(frame, distance_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+
                 # Print the rotation and translation vectors (pose information)
                 print(f"Rotation Vector: {rvec}")
                 print(f"Translation Vector: {tvec}")
